@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Player & Visualizer</title>
+    <!-- Load @tonejs/midi and html-midi-player components -->
+    <script src="https://unpkg.com"></script>
+    <script src="https://unpkg.com"></script>
+    <style>
+        :root {
+            --bg-color: #1e1e2e;
+            --card-color: #252538;
+            --text-color: #cdd6f4;
+            --accent-color: #cba6f7;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--card-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            text-align: center;
+            color: var(--accent-color);
+        }
+
+        .upload-section {
+            border: 2px dashed #45475a;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            position: relative;
+        }
+
+        .upload-section:hover {
+            border-color: var(--accent-color);
+        }
+
+        .upload-section input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Customize the html-midi-player elements */
+        midi-player {
+            width: 100%;
+            background: #313244;
+            border-radius: 8px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        midi-visualizer {
+            width: 100%;
+            height: 350px;
+            background: #11111b;
+            border-radius: 8px;
+        }
+
+        /* Style internal elements of the visualizer piano roll */
+        midi-visualizer .piano-roll-visualizer {
+            background: #11111b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>MIDI Player & Visualizer</h1>
+        
+        <div class="upload-section">
+            <p><strong>Click to upload</strong> or drag and drop a MIDI file (.mid)</p>
+            <input type="file" id="midi-upload" accept=".mid,.midi">
+        </div>
+
+        <!-- MIDI Player Controls -->
+        <midi-player id="my-player" sound-font visualizer="#my-visualizer"></midi-player>
+
+        <!-- MIDI Piano Roll Visualizer -->
+        <midi-visualizer id="my-visualizer" type="piano-roll"></midi-visualizer>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('midi-upload');
+        const player = document.getElementById('my-player');
+        const visualizer = document.getElementById('my-visualizer');
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                
+                // Assign the uploaded file URL to both player and visualizer
+                player.setAttribute('src', url);
+                visualizer.setAttribute('src', url);
+            }
+        });
+    </script>
+</body>
+</html>
